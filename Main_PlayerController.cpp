@@ -43,7 +43,7 @@ void AMain_PlayerController::SetNewDestination(const FVector DestLocation)
 		//목적지로 폰을 이동시키기 위한 처리를 하는 모든 코드를 일일이 작성하는 대신에 
 		//간단한 함수 호출로 그 모든 일을 할 수 있도록 도와준다.
 
-		if (Distance > 120.0f)
+		if (Distance > 60.0f) //120.f
 		{
 			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
 		}

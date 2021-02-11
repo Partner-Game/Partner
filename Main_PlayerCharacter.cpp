@@ -26,7 +26,7 @@ AMain_PlayerCharacter::AMain_PlayerCharacter()
 	가까운 평면으로 붙여서 시작되도록 한다. 여기서 평면이란 내비게이션 메시를 의미한다.
 	*/
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 15.f, 0.0f);
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
@@ -34,17 +34,25 @@ AMain_PlayerCharacter::AMain_PlayerCharacter()
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->SetUsingAbsoluteRotation(true);
 	CameraBoom->TargetArmLength = 800.0f;
-	CameraBoom->SetRelativeRotation(FRotator(-130.f, 45.f, 0.0f));
+	CameraBoom->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f)); // -130.f / 45.0f 0.0f
 	CameraBoom->bDoCollisionTest = false;
 	CameraBoom->bEnableCameraLag = true;
+	CameraBoom->bUsePawnControlRotation = true;
+	CameraBoom->bInheritPitch = false;
+	CameraBoom->bInheritRoll = false;
+	//CameraBoom->bInheritYaw = false;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
+
+	GetCharacterMovement()->JumpZVelocity = 300.f;
+	GetCharacterMovement()->AirControl = 0.2;
 
 
 }
@@ -67,6 +75,9 @@ void AMain_PlayerCharacter::Tick(float DeltaTime)
 void AMain_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction("JUMP", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("JUMP", IE_Released, this, &ACharacter::StopJumping);
 
 }
 
