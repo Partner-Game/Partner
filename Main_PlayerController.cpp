@@ -3,13 +3,30 @@
 
 #include "Main_PlayerController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "Blueprint/UserWidget.h"
+
+void AMain_PlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	if (User_HUDOverlayAsset)
+	{
+		User_HUDOverlay = CreateWidget<UUserWidget>(this, User_HUDOverlayAsset);
+	}
+	User_HUDOverlay->AddToViewport();
+	User_HUDOverlay->SetVisibility(ESlateVisibility::Visible);
+}
+
+void AMain_PlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
 
 AMain_PlayerController::AMain_PlayerController()
 {
 	bShowMouseCursor = true;
 }
 
-// Key ¹ÙÀÎµù
+// Key ë°”ì¸ë”©
 void AMain_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -36,14 +53,14 @@ void AMain_PlayerController::SetNewDestination(const FVector DestLocation)
 	{
 		float const Distance = FVector::Dist(DestLocation, MyPawn->GetActorLocation());
 
-		//ÀÌ ÇÔ¼ö¿¡¼­´Â ¿ì¼± ÄÁÆ®·Ñ·¯°¡ ¼ÒÀ¯ÇÏ°í ÀÖ´Â ÆùÀ» 
-		//°¡Á®¿Í¼­ Æù°ú ¸ñÀûÁö »çÀÌÀÇ °Å¸®¸¦ ÃøÁ¤ÇØ¼­, 
-		//±× °Å¸®°¡ 120 ¾ð¸®¾ó À¯´Öº¸´Ù Å©¸é ÆùÀ» ¸ñÀûÁö·Î ÀÌµ¿½ÃÅ²´Ù. 
-		//UAIBlueprintHelperLibraryÅ¬·¡½ºÀÇ SimpleMoveToLocation() ÇÔ¼ö´Â ÇÁ·Î±×·¡¸Ó°¡ 
-		//¸ñÀûÁö·Î ÆùÀ» ÀÌµ¿½ÃÅ°±â À§ÇÑ Ã³¸®¸¦ ÇÏ´Â ¸ðµç ÄÚµå¸¦ ÀÏÀÏÀÌ ÀÛ¼ºÇÏ´Â ´ë½Å¿¡ 
-		//°£´ÜÇÑ ÇÔ¼ö È£Ãâ·Î ±× ¸ðµç ÀÏÀ» ÇÒ ¼ö ÀÖµµ·Ï µµ¿ÍÁØ´Ù.
+		//ì´ í•¨ìˆ˜ì—ì„œëŠ” ìš°ì„  ì»¨íŠ¸ë¡¤ëŸ¬ê°€ ì†Œìœ í•˜ê³  ìžˆëŠ” í°ì„ 
+		//ê°€ì ¸ì™€ì„œ í°ê³¼ ëª©ì ì§€ ì‚¬ì´ì˜ ê±°ë¦¬ë¥¼ ì¸¡ì •í•´ì„œ, 
+		//ê·¸ ê±°ë¦¬ê°€ 120 ì–¸ë¦¬ì–¼ ìœ ë‹›ë³´ë‹¤ í¬ë©´ í°ì„ ëª©ì ì§€ë¡œ ì´ë™ì‹œí‚¨ë‹¤. 
+		//UAIBlueprintHelperLibraryí´ëž˜ìŠ¤ì˜ SimpleMoveToLocation() í•¨ìˆ˜ëŠ” í”„ë¡œê·¸ëž˜ë¨¸ê°€ 
+		//ëª©ì ì§€ë¡œ í°ì„ ì´ë™ì‹œí‚¤ê¸° ìœ„í•œ ì²˜ë¦¬ë¥¼ í•˜ëŠ” ëª¨ë“  ì½”ë“œë¥¼ ì¼ì¼ì´ ìž‘ì„±í•˜ëŠ” ëŒ€ì‹ ì— 
+		//ê°„ë‹¨í•œ í•¨ìˆ˜ í˜¸ì¶œë¡œ ê·¸ ëª¨ë“  ì¼ì„ í•  ìˆ˜ ìžˆë„ë¡ ë„ì™€ì¤€ë‹¤.
 
-		if (Distance > 60.0f) //120.f
+		if (Distance > 120.0f) //120.f
 		{
 			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
 		}
