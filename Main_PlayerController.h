@@ -17,10 +17,17 @@ class TIMERPROJECT_API AMain_PlayerController : public APlayerController
 public:
 	AMain_PlayerController();
 
+	// UMG Editor Asset
+	UPROPERTY(EditAnywhere, BlueprintReadwrite, Category = "widgets")
+	TSubclassOf<class UUserWidget> User_HUDOverlayAsset;
+
+	// Create HUD Widgets
+	UPROPERTY(EditAnywhere, BlueprintReadwrite, Category = "widgets")
+	UUserWidget* User_HUDOverlay;
 
 protected:
 
-	// ¸¶¿ì½º Å¬¸¯ ¿©ºÎ 
+	// ë§ˆìš°ìŠ¤ í´ë¦­ ì—¬ë¶€ 
 	bool bClickMouse;
 
 	void InputClickPressed();
@@ -28,10 +35,16 @@ protected:
 
 	virtual void SetupInputComponent() override;
 
-	// »õ·Î¿î ¸ñÇ¥·Î ÀÔ·Â¹Ş¾Æ Ä³¸¯ÅÍ¸¦ ÇØ´çÀ§Ä¡·Î ÀÌµ¿½ÃÅ°´Â ¿ªÈ°
+	// ìƒˆë¡œìš´ ëª©í‘œë¡œ ì…ë ¥ë°›ì•„ ìºë¦­í„°ë¥¼ í•´ë‹¹ìœ„ì¹˜ë¡œ ì´ë™ì‹œí‚¤ëŠ” ì—­í™œ
 	void SetNewDestination(const FVector DestLocation);
 
 	void MoveToMouseCursor();
 
 	virtual void PlayerTick(float DeltaTime) override;
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
 };
